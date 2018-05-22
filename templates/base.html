@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src='https://code.jquery.com/jquery-3.3.1.min.js'> </script>
+		<script type="text/javascript">
+			$(function() {
+				$('button').click(function() {
+					var searchString = $('#txtSearch').val();
+					$.ajax({
+						url: '/search',
+						data: $('form').serialize(),
+						type: 'POST',
+						success: function(response) {
+							var element = document.getElementById('result');
+							element.innerHTML = ''
+							for (i = 0; i < response.length; ++i) {
+								var paragraph = document.createElement('p');
+								var node = document.createTextNode(response[i]);
+								paragraph.appendChild(node);
+								element.appendChild(paragraph);
+							}
+						},
+						error: function(error) {
+							console.log(error);
+						}
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<form class='search' action='/search' method='post' role='form'>
+			<input type='text' name='search' class='form-control' required autofocus>
+			<button class="btn btn-lg btn-primary btn-block" type="button">Search</button>
+		</form>
+		<div id='result'></div>
+	</body>
+</html>
