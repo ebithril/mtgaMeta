@@ -7,10 +7,11 @@ from flask import request
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     return render_template('base.html')
-    
+
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -19,7 +20,6 @@ def search():
     names = []
     cards = Card.where(set=sets).where(name=request.form['search']).all()
     for card in cards:
-        names.append(card.name)
+        names.append({'name': card.name, 'image': card.image_url})
 
     return jsonify(names)
-

@@ -14,10 +14,19 @@
 							var element = document.getElementById('result');
 							element.innerHTML = ''
 							for (i = 0; i < response.length; ++i) {
+								var div = document.createElement('div');
+								div.classList.add('card')
+
+								var img = document.createElement('img');
+								img.src = response[i]['image'];
+								div.appendChild(img);
+
 								var paragraph = document.createElement('p');
-								var node = document.createTextNode(response[i]);
+								var node = document.createTextNode(response[i]['name']);
 								paragraph.appendChild(node);
-								element.appendChild(paragraph);
+								div.appendChild(paragraph);
+
+								element.appendChild(div);
 							}
 						},
 						error: function(error) {
@@ -29,7 +38,7 @@
 		</script>
 	</head>
 	<body>
-		<form class='search' action='/search' method='post' role='form'>
+		<form class='search' role='form'>
 			<input type='text' name='search' class='form-control' required autofocus>
 			<button class="btn btn-lg btn-primary btn-block" type="button">Search</button>
 		</form>
