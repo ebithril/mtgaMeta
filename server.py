@@ -15,7 +15,7 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    sets = 'AER,AKH,HOU,XLN,RIX,DOM'
+    sets = 'KLD,AER,AKH,HOU,XLN,RIX,DOM'
 
     names = []
     cards = Card.where(set=sets).where(name=request.form['search']).all()
