@@ -5,6 +5,9 @@ from flask import render_template
 from flask import jsonify
 from flask import request
 
+import os
+import json
+
 app = Flask(__name__)
 
 
@@ -17,9 +20,27 @@ def index():
 def search():
     sets = 'KLD,AER,AKH,HOU,XLN,RIX,DOM'
 
+    searchTerm = request.form['search']
+    if not os.path.isdir('cache'):
+        os.makedirs('cache')
+
+    cacheFile = 'cache/%s.json' % searchTerm
+    if not os.path.isfile(cacheFile):
+        cards = Card.where(set=sets).where(name=searchTerm).all()
+        with open(cacheFile, 'w') as f:
+            data = '['
+            for card in cards:
+                data += json.dumps(card.__dict__)
+                data += ','
+            data = data[:-1] + ']'
+            f.write(data)
+
+    cards = []
+    with open(cacheFile, 'r') as f:
+        cards = json.loads(f.read())
+
     names = []
-    cards = Card.where(set=sets).where(name=request.form['search']).all()
     for card in cards:
-        names.append({'name': card.name, 'image': card.image_url})
+        names.append({'name': card['name'], 'image': card['image_url']})
 
     return jsonify(names)
